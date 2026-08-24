@@ -425,3 +425,145 @@ export const BATTERY_TYPES = [
     acidLiters: 3.2,
   },
 ];
+
+export const MONTHLY_RECOVERY_GROWTH = [
+  { month: 'Oct 2025', batteries: 8400, leadMT: 105, acidKL: 21, co2Saved: 230 },
+  { month: 'Nov 2025', batteries: 11200, leadMT: 140, acidKL: 28, co2Saved: 310 },
+  { month: 'Dec 2025', batteries: 15600, leadMT: 195, acidKL: 39, co2Saved: 430 },
+  { month: 'Jan 2026', batteries: 21400, leadMT: 268, acidKL: 53, co2Saved: 590 },
+  { month: 'Feb 2026', batteries: 27800, leadMT: 348, acidKL: 69, co2Saved: 770 },
+  { month: 'Mar 2026', batteries: 34500, leadMT: 431, acidKL: 86, co2Saved: 955 },
+  { month: 'Apr 2026', batteries: 42300, leadMT: 529, acidKL: 106, co2Saved: 1170 },
+];
+
+export const DISTRICT_IMPACT_DATA = [
+  { district: 'Tejgaon & Central', batteries: 38400, leadMT: 480, acidKL: 96, garages: 310 },
+  { district: 'Mirpur & Pallabi', batteries: 32600, leadMT: 408, acidKL: 81, garages: 285 },
+  { district: 'Tongi & Gazipur', batteries: 29800, leadMT: 372, acidKL: 74, garages: 240 },
+  { district: 'Narayanganj & Kanchpur', batteries: 24500, leadMT: 306, acidKL: 61, garages: 195 },
+  { district: 'Demra & Jatrabari', batteries: 14200, leadMT: 178, acidKL: 35, garages: 125 },
+  { district: 'Keraniganj & Old Dhaka', batteries: 9420, leadMT: 118, acidKL: 24, garages: 85 },
+];
+
+export const MATERIAL_RECOVERY_COMPOSITION = [
+  { name: 'Refined Secondary Lead (99.97%)', value: 65, color: '#15803D', label: '65% Pure Lead' },
+  { name: 'Neutralized Acid (Gypsum Slurry)', value: 18, color: '#0284C7', label: '18% Neutral Gypsum' },
+  { name: 'Polypropylene Plastic Pellets', value: 12, color: '#F59E0B', label: '12% Circular Plastics' },
+  { name: 'Grid Connectors & Iron Poles', value: 5, color: '#64748B', label: '5% Metal Hardware' },
+];
+
+export const HUB_CAPACITY_DATA = [
+  { hub: 'Tejgaon', capacity: 650, currentIntake: 580, utilization: 89 },
+  { hub: 'Tongi', capacity: 580, currentIntake: 510, utilization: 88 },
+  { hub: 'Narayanganj', capacity: 520, currentIntake: 460, utilization: 88 },
+  { hub: 'Mirpur', capacity: 500, currentIntake: 440, utilization: 88 },
+  { hub: 'Demra', capacity: 420, currentIntake: 360, utilization: 86 },
+  { hub: 'Keraniganj', capacity: 350, currentIntake: 290, utilization: 83 },
+];
+
+export const PRICE_TREND_DATA = [
+  { month: 'Oct', voltloopRate: 154, informalRate: 128, spread: 26 },
+  { month: 'Nov', voltloopRate: 156, informalRate: 130, spread: 26 },
+  { month: 'Dec', voltloopRate: 158, informalRate: 127, spread: 31 },
+  { month: 'Jan', voltloopRate: 161, informalRate: 132, spread: 29 },
+  { month: 'Feb', voltloopRate: 163, informalRate: 134, spread: 29 },
+  { month: 'Mar', voltloopRate: 165, informalRate: 136, spread: 29 },
+  { month: 'Apr', voltloopRate: 168, informalRate: 138, spread: 30 },
+];
+
+export const PURITY_BENCHMARK_DATA = [
+  { 
+    parameter: 'Secondary Lead Purity', 
+    shortName: 'Lead Purity',
+    voltloop: 99.97, 
+    informalBackyard: 88.50, 
+    unit: '%',
+    standardReq: 99.90,
+    gain: '+11.47% Higher Purity',
+    voltDesc: '99.97% LME Certified',
+    informalDesc: '88.50% Contaminated',
+    impact: 'Meets Tier-1 battery OEM specs without virgin lead blending',
+    testStandard: 'ASTM B29-19 / ICP-OES',
+    category: 'Material Yield'
+  },
+  { 
+    parameter: 'Baghouse Particulate Capture', 
+    shortName: 'Lead Dust Filtration',
+    voltloop: 99.90, 
+    informalBackyard: 0.0, 
+    unit: '%',
+    standardReq: 95.0,
+    gain: 'Zero Urban Toxic Smoke',
+    voltDesc: '99.90% Lead Dust Filtered',
+    informalDesc: '0% (Open Air Release)',
+    impact: 'Eliminates atmospheric lead dust in residential zones',
+    testStandard: 'ISO 9096 / EPA Method 5D',
+    category: 'Air Emissions'
+  },
+  { 
+    parameter: 'Hazardous Acid Containment', 
+    shortName: 'Acid Containment',
+    voltloop: 100.0, 
+    informalBackyard: 0.0, 
+    unit: '%',
+    standardReq: 100.0,
+    gain: '100% Groundwater Protection',
+    voltDesc: '100% Siphoned & Neutralized',
+    informalDesc: '0% (Dumped in Drains)',
+    impact: 'Neutralized into agricultural-grade gypsum slurry',
+    testStandard: 'EPA Method 9040C / ISO 14001',
+    category: 'Water & Soil'
+  },
+  { 
+    parameter: 'Polypropylene Plastic Recycling', 
+    shortName: 'Plastic Circularity',
+    voltloop: 100.0, 
+    informalBackyard: 0.0, 
+    unit: '%',
+    standardReq: 90.0,
+    gain: 'No Dioxin Toxins',
+    voltDesc: '100% Circular Granules',
+    informalDesc: 'Burned as Furnace Fuel',
+    impact: 'Extruded into high-impact battery casing grade resin',
+    testStandard: 'ISO 178 / ASTM D638',
+    category: 'Plastics'
+  },
+  {
+    parameter: 'Lead Recovery Yield Efficiency',
+    shortName: 'Recovery Yield',
+    voltloop: 98.4,
+    informalBackyard: 68.2,
+    unit: '%',
+    standardReq: 92.0,
+    gain: '+30.2% Total Metal Extracted',
+    voltDesc: '98.4% Total Lead Extracted',
+    informalDesc: '68.2% (Lost in Slag & Ash)',
+    impact: 'Maximizes payout to collection garages and depots',
+    testStandard: 'ISO 11885 ICP Mass Balance',
+    category: 'Material Yield'
+  },
+  {
+    parameter: 'Worker Occupational Safety (BLL)',
+    shortName: 'Worker Safety',
+    voltloop: 96.0,
+    informalBackyard: 12.0,
+    unit: '% Safe',
+    standardReq: 85.0,
+    gain: 'WHO Compliance (<5 µg/dL)',
+    voltDesc: 'Full PAPR PPE & Robotic Feed',
+    informalDesc: 'Unprotected Manual Axe Smashing',
+    impact: 'Zero toxic childhood or worker neurotoxicity exposure',
+    testStandard: 'OSHA 1910.1025 / WHO Guidelines',
+    category: 'Worker Health'
+  }
+];
+
+export const BENCHMARK_CHART_METRICS = [
+  { name: 'Lead Purity', VoltLoop: 99.97, Informal: 88.50, Benchmark: 99.90 },
+  { name: 'Dust Filter', VoltLoop: 99.90, Informal: 0.00, Benchmark: 95.00 },
+  { name: 'Acid Neutralized', VoltLoop: 100.00, Informal: 0.00, Benchmark: 100.00 },
+  { name: 'Plastic Recycled', VoltLoop: 100.00, Informal: 0.00, Benchmark: 90.00 },
+  { name: 'Yield Efficiency', VoltLoop: 98.40, Informal: 68.20, Benchmark: 92.00 },
+];
+
+

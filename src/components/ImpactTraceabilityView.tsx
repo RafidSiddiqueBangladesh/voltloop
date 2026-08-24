@@ -13,9 +13,32 @@ import {
   Zap,
   Globe,
   CheckCircle2,
-  Lock
+  Lock,
+  TrendingUp,
+  BarChart3,
+  PieChart as PieIcon
 } from 'lucide-react';
+import { 
+  AreaChart, 
+  Area, 
+  BarChart, 
+  Bar, 
+  PieChart, 
+  Pie, 
+  Cell, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  Legend
+} from 'recharts';
 import { ImpactStats, Language, PublicLedgerEntry } from '../types';
+import { 
+  MONTHLY_RECOVERY_GROWTH, 
+  DISTRICT_IMPACT_DATA, 
+  MATERIAL_RECOVERY_COMPOSITION 
+} from '../data/mockData';
 
 interface ImpactTraceabilityViewProps {
   impactStats: ImpactStats;
@@ -32,6 +55,7 @@ export const ImpactTraceabilityView: React.FC<ImpactTraceabilityViewProps> = ({
 }) => {
   const [districtFilter, setDistrictFilter] = useState('All');
   const [downloadedCert, setDownloadedCert] = useState(false);
+  const [activeMetricTab, setActiveMetricTab] = useState<'lead' | 'batteries' | 'acid'>('lead');
 
   const districts = ['All', 'Dhaka North', 'Dhaka South', 'Dhaka Central', 'Gazipur', 'Narayanganj'];
 
@@ -43,6 +67,7 @@ export const ImpactTraceabilityView: React.FC<ImpactTraceabilityViewProps> = ({
     setDownloadedCert(true);
     setTimeout(() => setDownloadedCert(false), 3000);
   };
+
 
   return (
     <div className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16 animate-in fade-in duration-300">
@@ -178,6 +203,286 @@ export const ImpactTraceabilityView: React.FC<ImpactTraceabilityViewProps> = ({
           </button>
         </div>
       </div>
+
+      {/* INTERACTIVE DATA VISUALIZATIONS & CHARTS */}
+      <section className="space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-[#15803D]" />
+              <h2 className="text-2xl sm:text-3xl font-black font-heading text-zinc-900">
+                {language === 'en' ? 'Environmental Recovery Analytics' : 'লাইভ রিকভারি ও ইমপ্যাক্ট গ্রাফ'}
+              </h2>
+            </div>
+            <p className="text-xs sm:text-sm text-zinc-500 mt-1">
+              {language === 'en' ? 'Real-time telemetry and aggregated yield curves verified through IoT scales and laboratory assays.' : 'আইওটি স্কেল ও ল্যাব টেস্টের ভিত্তিতে স্বয়ংক্রিয়ভাবে আপডেট হওয়া রিসাইক্লিং মেট্রিকস।'}
+            </p>
+          </div>
+
+          {/* Metric Toggle */}
+          <div className="flex items-center bg-zinc-100 p-1 rounded-xl border border-zinc-200 self-start sm:self-auto">
+            <button
+              onClick={() => setActiveMetricTab('lead')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                activeMetricTab === 'lead'
+                  ? 'bg-white text-zinc-900 shadow-xs'
+                  : 'text-zinc-500 hover:text-zinc-800'
+              }`}
+            >
+              Pure Lead (MT)
+            </button>
+            <button
+              onClick={() => setActiveMetricTab('batteries')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                activeMetricTab === 'batteries'
+                  ? 'bg-white text-zinc-900 shadow-xs'
+                  : 'text-zinc-500 hover:text-zinc-800'
+              }`}
+            >
+              Diverted Units
+            </button>
+            <button
+              onClick={() => setActiveMetricTab('acid')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                activeMetricTab === 'acid'
+                  ? 'bg-white text-zinc-900 shadow-xs'
+                  : 'text-zinc-500 hover:text-zinc-800'
+              }`}
+            >
+              Acid Neutralized (kL)
+            </button>
+          </div>
+        </div>
+
+        {/* Chart Grid: Main Timeline Curve + Composition Donut */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Area Growth Chart (2 Cols) */}
+          <div className="lg:col-span-2 bg-white rounded-3xl p-6 sm:p-7 border border-zinc-200 shadow-sm space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800">
+                  Monthly Trajectory
+                </span>
+                <h3 className="text-lg font-bold text-zinc-900">
+                  {activeMetricTab === 'lead' && '99.97% Pure Secondary Lead Recovered (Metric Tons)'}
+                  {activeMetricTab === 'batteries' && 'Dead Battery Units Collected from Garages'}
+                  {activeMetricTab === 'acid' && 'Hazardous Sulfuric Acid Neutralized (kL)'}
+                </h3>
+              </div>
+              <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-mono font-bold">
+                +403% QoQ Growth
+              </span>
+            </div>
+
+            <div className="h-72 w-full pt-2">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={MONTHLY_RECOVERY_GROWTH}
+                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient id="leadGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#15803D" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#15803D" stopOpacity={0.0} />
+                    </linearGradient>
+                    <linearGradient id="batteryGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#0284C7" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#0284C7" stopOpacity={0.0} />
+                    </linearGradient>
+                    <linearGradient id="acidGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#F59E0B" stopOpacity={0.0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                  <XAxis 
+                    dataKey="month" 
+                    stroke="#94a3b8" 
+                    fontSize={11} 
+                    tickLine={false} 
+                    axisLine={{ stroke: '#e2e8f0' }}
+                  />
+                  <YAxis 
+                    stroke="#94a3b8" 
+                    fontSize={11} 
+                    tickLine={false} 
+                    axisLine={false}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#0A160E',
+                      borderColor: '#107c2b',
+                      borderRadius: '12px',
+                      color: '#ffffff',
+                      fontSize: '12px',
+                      boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
+                    }}
+                    labelStyle={{ color: '#86efac', fontWeight: 'bold' }}
+                  />
+                  {activeMetricTab === 'lead' && (
+                    <Area
+                      type="monotone"
+                      dataKey="leadMT"
+                      name="Lead Recovered (MT)"
+                      stroke="#15803D"
+                      strokeWidth={3}
+                      fillOpacity={1}
+                      fill="url(#leadGrad)"
+                    />
+                  )}
+                  {activeMetricTab === 'batteries' && (
+                    <Area
+                      type="monotone"
+                      dataKey="batteries"
+                      name="Batteries Diverted"
+                      stroke="#0284C7"
+                      strokeWidth={3}
+                      fillOpacity={1}
+                      fill="url(#batteryGrad)"
+                    />
+                  )}
+                  {activeMetricTab === 'acid' && (
+                    <Area
+                      type="monotone"
+                      dataKey="acidKL"
+                      name="Acid Neutralized (kL)"
+                      stroke="#F59E0B"
+                      strokeWidth={3}
+                      fillOpacity={1}
+                      fill="url(#acidGrad)"
+                    />
+                  )}
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Donut Chart: Material Recovery Fraction */}
+          <div className="bg-white rounded-3xl p-6 sm:p-7 border border-zinc-200 shadow-sm space-y-4 flex flex-col justify-between">
+            <div>
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800">
+                Circular Efficiency
+              </span>
+              <h3 className="text-lg font-bold text-zinc-900">
+                Battery Material Recovery Yield
+              </h3>
+              <p className="text-xs text-zinc-500 mt-0.5">
+                Zero landfill waste — 100% of inputs refined into industrial grade commodities.
+              </p>
+            </div>
+
+            <div className="h-52 w-full relative flex items-center justify-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={MATERIAL_RECOVERY_COMPOSITION}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={55}
+                    outerRadius={80}
+                    paddingAngle={4}
+                    dataKey="value"
+                  >
+                    {MATERIAL_RECOVERY_COMPOSITION.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#0A160E',
+                      borderColor: '#107c2b',
+                      borderRadius: '8px',
+                      color: '#ffffff',
+                      fontSize: '11px',
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span className="text-2xl font-black font-mono text-zinc-900">100%</span>
+                <span className="text-[10px] uppercase font-bold text-emerald-700 tracking-wider">Recycled</span>
+              </div>
+            </div>
+
+            <div className="space-y-1.5 pt-2 border-t border-zinc-100 text-xs">
+              {MATERIAL_RECOVERY_COMPOSITION.map((item) => (
+                <div key={item.name} className="flex items-center justify-between text-[11px]">
+                  <span className="flex items-center gap-1.5 text-zinc-600">
+                    <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+                    <span className="truncate max-w-[170px]">{item.name}</span>
+                  </span>
+                  <span className="font-mono font-bold text-zinc-900">{item.value}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* District Breakdown Bar Chart */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800">
+                Dhaka Regional Hub Analysis
+              </span>
+              <h3 className="text-lg font-bold text-zinc-900">
+                Regional Collection Volume & Secondary Lead Output
+              </h3>
+            </div>
+            <span className="text-xs text-zinc-500 font-mono">
+              6 Operational Clusters Across Greater Dhaka
+            </span>
+          </div>
+
+          <div className="h-64 w-full pt-3">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={DISTRICT_IMPACT_DATA}
+                margin={{ top: 10, right: 10, left: -20, bottom: 20 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                <XAxis 
+                  dataKey="district" 
+                  stroke="#94a3b8" 
+                  fontSize={11} 
+                  tickLine={false} 
+                  axisLine={{ stroke: '#e2e8f0' }}
+                  angle={-10}
+                  textAnchor="end"
+                />
+                <YAxis 
+                  stroke="#94a3b8" 
+                  fontSize={11} 
+                  tickLine={false} 
+                  axisLine={false}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#0A160E',
+                    borderColor: '#107c2b',
+                    borderRadius: '12px',
+                    color: '#ffffff',
+                    fontSize: '12px',
+                  }}
+                  cursor={{ fill: 'rgba(21, 128, 61, 0.05)' }}
+                />
+                <Bar 
+                  dataKey="leadMT" 
+                  name="Pure Lead Output (MT)" 
+                  fill="#15803D" 
+                  radius={[6, 6, 0, 0]} 
+                />
+                <Bar 
+                  dataKey="acidKL" 
+                  name="Acid Neutralized (kL)" 
+                  fill="#0284C7" 
+                  radius={[6, 6, 0, 0]} 
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </section>
 
       {/* PUBLIC ANONYMIZED LIVE COLLECTION LOG / LEDGER */}
       <section className="bg-white rounded-3xl p-6 sm:p-10 border border-zinc-200 shadow-lg space-y-6">

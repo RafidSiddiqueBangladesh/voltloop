@@ -18,10 +18,21 @@ import {
   Calculator,
   Building2,
   Users,
-  Navigation
+  Navigation,
+  BarChart3
 } from 'lucide-react';
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  Legend
+} from 'recharts';
 import { ImpactStats, Language, PageView } from '../types';
-import { BATTERY_TYPES } from '../data/mockData';
+import { BATTERY_TYPES, PRICE_TREND_DATA } from '../data/mockData';
 import { VoltLogo } from './VoltLogo';
 
 interface HomeViewProps {
@@ -30,6 +41,7 @@ interface HomeViewProps {
   onNavigate: (page: PageView) => void;
   language: Language;
 }
+
 
 export const HomeView: React.FC<HomeViewProps> = ({
   impactStats,
@@ -67,7 +79,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-heading text-zinc-900 tracking-tight leading-[1.08]">
               {language === 'en' ? (
                 <>
-                  Bangladesh’s Safe Battery Recycling <span className="text-[#15803D] underline decoration-emerald-300 decoration-wavy underline-offset-8">Offtake Network.</span>
+                  Bangladesh’s Safe Battery Recycling <span className="text-[#15803D]">Offtake Network.</span>
                 </>
               ) : (
                 <>
@@ -273,6 +285,105 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 {(impactStats.acidNeutralizedLiters / 1000).toFixed(0)}k <span className="text-sm font-sans text-zinc-400">Liters</span>
               </div>
               <span className="text-[11px] text-zinc-400">100% neutralized to gypsum</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PRICING TRANSPARENCY & VOLTLOOP PREMIUM TREND CHART */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-3xl p-6 sm:p-9 border border-zinc-200 shadow-lg space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-100 pb-5">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-[#15803D] text-xs font-bold uppercase tracking-wider mb-2">
+                <TrendingUp className="w-3.5 h-3.5" />
+                <span>{language === 'en' ? 'Market Transparency Benchmark' : 'ন্যায্য মূল্য ও মুনাফার তুলনামূলক চিত্র'}</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-black font-heading text-zinc-900 tracking-tight">
+                {language === 'en' ? 'Direct Manufacturer Offtake vs Scrap Middlemen Rate' : 'ভোল্টলুপ বনাম সাধারণ ভাঙারি ব্যবসায়ীদের দর'}
+              </h2>
+              <p className="text-xs sm:text-sm text-zinc-500 mt-1">
+                {language === 'en' ? 'Historical secondary lead purchase price (BDT / kg) over the past 7 months across Dhaka depots.' : 'গত ৭ মাসের প্রতি কেজি সিসার গড় ক্রয়মূল্যের পরিসংখ্যান।'}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <span className="text-[10px] text-zinc-400 font-mono uppercase block">Seller Margin Advantage</span>
+                <span className="text-xl font-black font-mono text-[#15803D]">+৳28–31 / kg</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="h-72 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={PRICE_TREND_DATA}
+                margin={{ top: 10, right: 20, left: -20, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                <XAxis 
+                  dataKey="month" 
+                  stroke="#94a3b8" 
+                  fontSize={12} 
+                  tickLine={false} 
+                  axisLine={{ stroke: '#e2e8f0' }}
+                />
+                <YAxis 
+                  stroke="#94a3b8" 
+                  fontSize={12} 
+                  tickLine={false} 
+                  axisLine={false}
+                  domain={[120, 180]}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#0A160E',
+                    borderColor: '#107c2b',
+                    borderRadius: '12px',
+                    color: '#ffffff',
+                    fontSize: '12px',
+                    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
+                  }}
+                  formatter={(value: any, name: any) => [`৳${value} BDT/kg`, name]}
+                />
+                <Legend 
+                  wrapperStyle={{ paddingTop: '12px', fontSize: '12px' }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="voltloopRate"
+                  name="VoltLoop Certified Direct Rate (৳/kg)"
+                  stroke="#15803D"
+                  strokeWidth={3.5}
+                  dot={{ r: 5, fill: '#15803D', strokeWidth: 2, stroke: '#ffffff' }}
+                  activeDot={{ r: 8, stroke: '#15803D', strokeWidth: 2, fill: '#ffffff' }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="informalRate"
+                  name="Informal Middleman Average Rate (৳/kg)"
+                  stroke="#94a3b8"
+                  strokeWidth={2}
+                  strokeDasharray="4 4"
+                  dot={{ r: 4, fill: '#94a3b8' }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-zinc-100 text-xs">
+            <div className="bg-zinc-50 p-3.5 rounded-xl border border-zinc-200">
+              <span className="font-bold text-zinc-900 block mb-0.5">100% Digital Weighing</span>
+              <span className="text-zinc-600">Bluetooth certified scales prevent middlemen manipulation.</span>
+            </div>
+            <div className="bg-zinc-50 p-3.5 rounded-xl border border-zinc-200">
+              <span className="font-bold text-zinc-900 block mb-0.5">Instant Mobile Settlement</span>
+              <span className="text-zinc-600">Funds transferred directly via bKash / Nagad before pickup truck departs.</span>
+            </div>
+            <div className="bg-zinc-50 p-3.5 rounded-xl border border-zinc-200">
+              <span className="font-bold text-zinc-900 block mb-0.5">Guaranteed Manufacturer Offtake</span>
+              <span className="text-zinc-600">Direct supply to Rahimafrooz & Hamko eliminates brokers.</span>
             </div>
           </div>
         </div>

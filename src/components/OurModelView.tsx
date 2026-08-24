@@ -12,9 +12,32 @@ import {
   ArrowRight,
   Zap,
   Activity,
-  Maximize2
+  Maximize2,
+  BarChart3,
+  TrendingUp,
+  Award,
+  Table as TableIcon,
+  Flame,
+  Droplets,
+  Wind,
+  Check,
+  X,
+  FileCheck2,
+  Info
 } from 'lucide-react';
-import { DHAKA_HUBS } from '../data/mockData';
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  Legend,
+  Cell,
+  ReferenceLine
+} from 'recharts';
+import { DHAKA_HUBS, HUB_CAPACITY_DATA, PURITY_BENCHMARK_DATA, BENCHMARK_CHART_METRICS } from '../data/mockData';
 import { HubLocation, Language } from '../types';
 
 interface OurModelViewProps {
@@ -28,8 +51,11 @@ export const OurModelView: React.FC<OurModelViewProps> = ({
 }) => {
   const [activeVoltCard, setActiveVoltCard] = useState<number>(0);
   const [selectedHub, setSelectedHub] = useState<HubLocation>(DHAKA_HUBS[0]);
+  const [benchmarkViewMode, setBenchmarkViewMode] = useState<'all' | 'chart' | 'table'>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   const voltFramework = [
+
     {
       letter: 'V',
       word: 'Verify',
@@ -352,6 +378,415 @@ export const OurModelView: React.FC<OurModelViewProps> = ({
           </div>
         </div>
       </section>
+
+      {/* RECHARTS DATA VISUALIZATIONS: HUB THROUGHPUT */}
+      <section className="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <div className="flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-[#15803D]" />
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800">
+                Logistics Telemetry
+              </span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black font-heading text-zinc-900 mt-1">
+              Dhaka Depots Daily Throughput vs Processing Capacity
+            </h3>
+          </div>
+          <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-mono font-bold self-start sm:self-auto">
+            88% Average Network Utilization
+          </span>
+        </div>
+        <p className="text-xs sm:text-sm text-zinc-500">
+          Real-time daily battery units handling capacity vs active daily collections across Dhaka operational clusters.
+        </p>
+
+        <div className="h-64 w-full pt-3">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={HUB_CAPACITY_DATA}
+              margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+              <XAxis 
+                dataKey="hub" 
+                stroke="#94a3b8" 
+                fontSize={12} 
+                tickLine={false} 
+                axisLine={{ stroke: '#e2e8f0' }}
+              />
+              <YAxis 
+                stroke="#94a3b8" 
+                fontSize={12} 
+                tickLine={false} 
+                axisLine={false}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#0A160E',
+                  borderColor: '#107c2b',
+                  borderRadius: '12px',
+                  color: '#ffffff',
+                  fontSize: '12px',
+                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
+                }}
+                cursor={{ fill: 'rgba(21, 128, 61, 0.05)' }}
+              />
+              <Bar 
+                dataKey="capacity" 
+                name="Daily Design Capacity (Units)" 
+                fill="#cbd5e1" 
+                radius={[4, 4, 0, 0]} 
+              />
+              <Bar 
+                dataKey="currentIntake" 
+                name="Current Daily Intake (Units)" 
+                fill="#15803D" 
+                radius={[4, 4, 0, 0]} 
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
+
+      {/* COMPREHENSIVE TECHNICAL BENCHMARK: VOLTLOOP HYDROMETALLURGY VS INFORMAL SMELTING */}
+      <section className="bg-white rounded-3xl p-6 sm:p-10 border border-zinc-200 shadow-xl space-y-8">
+        {/* Section Header */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-zinc-200 pb-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-[#15803D] text-xs font-bold font-mono uppercase tracking-wider">
+              <Award className="w-3.5 h-3.5" />
+              <span>Laboratory Validated Assay & Technical Standards</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading text-zinc-900 tracking-tight">
+              VoltLoop Hydrometallurgy vs Informal Smelting
+            </h2>
+            <p className="text-sm sm:text-base text-zinc-600 max-w-3xl">
+              Laboratory validated lead recovery, emission capture, and chemical containment standards comparing engineered closed-loop hydrometallurgy against open-air backyard smelting.
+            </p>
+          </div>
+
+          {/* View Mode Toggle Buttons */}
+          <div className="flex items-center bg-zinc-100 p-1.5 rounded-2xl border border-zinc-200 shrink-0 self-start lg:self-auto">
+            <button
+              onClick={() => setBenchmarkViewMode('all')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                benchmarkViewMode === 'all'
+                  ? 'bg-white text-zinc-900 shadow-xs'
+                  : 'text-zinc-500 hover:text-zinc-900'
+              }`}
+            >
+              <Activity className="w-3.5 h-3.5 text-[#15803D]" />
+              <span>Overview</span>
+            </button>
+            <button
+              onClick={() => setBenchmarkViewMode('chart')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                benchmarkViewMode === 'chart'
+                  ? 'bg-white text-zinc-900 shadow-xs'
+                  : 'text-zinc-500 hover:text-zinc-900'
+              }`}
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-[#15803D]" />
+              <span>Bar Graph Chart</span>
+            </button>
+            <button
+              onClick={() => setBenchmarkViewMode('table')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                benchmarkViewMode === 'table'
+                  ? 'bg-white text-zinc-900 shadow-xs'
+                  : 'text-zinc-500 hover:text-zinc-900'
+              }`}
+            >
+              <TableIcon className="w-3.5 h-3.5 text-[#15803D]" />
+              <span>Analytics Table</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 4 CORE HIGHLIGHT KPI CARDS */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Card 1: Secondary Lead Purity */}
+          <div className="p-5 rounded-2xl bg-linear-to-b from-emerald-50/80 to-white border border-emerald-300 shadow-xs space-y-3 hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-800">
+                Purity Benchmark
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-bold font-mono">
+                +11.47% Higher
+              </span>
+            </div>
+            <div>
+              <h4 className="font-heading font-black text-zinc-900 text-base">Secondary Lead Purity</h4>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-2xl font-black font-mono text-[#15803D]">99.97%</span>
+                <span className="text-xs text-zinc-400 font-mono">vs 88.50%</span>
+              </div>
+            </div>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between text-[11px]">
+                <span className="text-emerald-800 font-semibold">VoltLoop: LME Certified</span>
+                <span className="text-rose-600 line-through">Informal: Contaminated</span>
+              </div>
+              <div className="w-full bg-zinc-200 h-2 rounded-full overflow-hidden flex">
+                <div className="bg-[#15803D] h-full" style={{ width: '99.97%' }} />
+              </div>
+            </div>
+            <p className="text-[11px] text-zinc-500 pt-1 border-t border-emerald-100 font-medium">
+              Meets Tier-1 OEM battery specifications without virgin lead blending.
+            </p>
+          </div>
+
+          {/* Card 2: Baghouse Particulate Capture */}
+          <div className="p-5 rounded-2xl bg-linear-to-b from-blue-50/80 to-white border border-blue-300 shadow-xs space-y-3 hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-blue-800">
+                Emission Standard
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-bold font-mono">
+                Zero Toxic Smoke
+              </span>
+            </div>
+            <div>
+              <h4 className="font-heading font-black text-zinc-900 text-base">Baghouse Dust Capture</h4>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-2xl font-black font-mono text-blue-700">99.90%</span>
+                <span className="text-xs text-zinc-400 font-mono">vs 0.00%</span>
+              </div>
+            </div>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between text-[11px]">
+                <span className="text-blue-800 font-semibold">VoltLoop: Filtered</span>
+                <span className="text-rose-600 line-through">Informal: Open Air</span>
+              </div>
+              <div className="w-full bg-zinc-200 h-2 rounded-full overflow-hidden flex">
+                <div className="bg-blue-600 h-full" style={{ width: '99.90%' }} />
+              </div>
+            </div>
+            <p className="text-[11px] text-zinc-500 pt-1 border-t border-blue-100 font-medium">
+              Eliminates airborne toxic lead dust and acid fumes in urban residential areas.
+            </p>
+          </div>
+
+          {/* Card 3: Hazardous Acid Containment */}
+          <div className="p-5 rounded-2xl bg-linear-to-b from-amber-50/80 to-white border border-amber-300 shadow-xs space-y-3 hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-800">
+                Chemical Safety
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-amber-600 text-white text-[10px] font-bold font-mono">
+                100% Protected
+              </span>
+            </div>
+            <div>
+              <h4 className="font-heading font-black text-zinc-900 text-base">Hazardous Acid Containment</h4>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-2xl font-black font-mono text-amber-700">100%</span>
+                <span className="text-xs text-zinc-400 font-mono">vs 0% Dumped</span>
+              </div>
+            </div>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between text-[11px]">
+                <span className="text-amber-800 font-semibold">VoltLoop: Neutralized</span>
+                <span className="text-rose-600 line-through">Informal: Drains Dump</span>
+              </div>
+              <div className="w-full bg-zinc-200 h-2 rounded-full overflow-hidden flex">
+                <div className="bg-amber-500 h-full" style={{ width: '100%' }} />
+              </div>
+            </div>
+            <p className="text-[11px] text-zinc-500 pt-1 border-t border-amber-100 font-medium">
+              Neutralized into inert gypsum slurry, fully safeguarding Dhaka groundwater.
+            </p>
+          </div>
+
+          {/* Card 4: Polypropylene Plastic Recycling */}
+          <div className="p-5 rounded-2xl bg-linear-to-b from-purple-50/80 to-white border border-purple-300 shadow-xs space-y-3 hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-purple-800">
+                Polymer Loop
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-purple-600 text-white text-[10px] font-bold font-mono">
+                Zero Dioxin
+              </span>
+            </div>
+            <div>
+              <h4 className="font-heading font-black text-zinc-900 text-base">PP Plastic Recycling</h4>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-2xl font-black font-mono text-purple-700">100%</span>
+                <span className="text-xs text-zinc-400 font-mono">vs Burned</span>
+              </div>
+            </div>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between text-[11px]">
+                <span className="text-purple-800 font-semibold">VoltLoop: Resin Pellets</span>
+                <span className="text-rose-600 line-through">Informal: Smelter Fuel</span>
+              </div>
+              <div className="w-full bg-zinc-200 h-2 rounded-full overflow-hidden flex">
+                <div className="bg-purple-600 h-full" style={{ width: '100%' }} />
+              </div>
+            </div>
+            <p className="text-[11px] text-zinc-500 pt-1 border-t border-purple-100 font-medium">
+              Re-extruded into impact-resistant casing plastic without burning dioxins.
+            </p>
+          </div>
+        </div>
+
+        {/* COMPARATIVE RECHARTS BAR GRAPH (RENDERED IN 'all' OR 'chart' MODE) */}
+        {(benchmarkViewMode === 'all' || benchmarkViewMode === 'chart') && (
+          <div className="bg-zinc-50 rounded-3xl p-6 sm:p-8 border border-zinc-200 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800">
+                  Quantitative Comparison
+                </span>
+                <h3 className="text-lg sm:text-xl font-bold text-zinc-900">
+                  Performance Metric (%) Comparison by Parameter
+                </h3>
+              </div>
+              <div className="flex items-center gap-4 text-xs font-mono">
+                <span className="flex items-center gap-1.5 font-bold text-[#15803D]">
+                  <span className="w-3 h-3 rounded-sm bg-[#15803D]" />
+                  <span>VoltLoop Hydrometallurgy</span>
+                </span>
+                <span className="flex items-center gap-1.5 font-bold text-rose-700">
+                  <span className="w-3 h-3 rounded-sm bg-rose-600" />
+                  <span>Informal Backyard Smelting</span>
+                </span>
+              </div>
+            </div>
+
+            <div className="h-80 w-full pt-3">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={BENCHMARK_CHART_METRICS}
+                  margin={{ top: 20, right: 20, left: -15, bottom: 10 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                  <XAxis 
+                    dataKey="name" 
+                    stroke="#64748b" 
+                    fontSize={12} 
+                    tickLine={false} 
+                    axisLine={{ stroke: '#cbd5e1' }}
+                  />
+                  <YAxis 
+                    stroke="#64748b" 
+                    fontSize={12} 
+                    tickLine={false} 
+                    axisLine={false}
+                    domain={[0, 105]}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#0A160E',
+                      borderColor: '#107c2b',
+                      borderRadius: '12px',
+                      color: '#ffffff',
+                      fontSize: '12px',
+                      boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
+                    }}
+                    formatter={(val: any) => [`${val}%`, '']}
+                  />
+                  <Legend 
+                    wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }}
+                  />
+                  <Bar 
+                    dataKey="VoltLoop" 
+                    name="VoltLoop Certified Yield (%)" 
+                    fill="#15803D" 
+                    radius={[6, 6, 0, 0]} 
+                  />
+                  <Bar 
+                    dataKey="Informal" 
+                    name="Informal Backyard Smelter (%)" 
+                    fill="#e11d48" 
+                    radius={[6, 6, 0, 0]} 
+                  />
+                  <Bar 
+                    dataKey="Benchmark" 
+                    name="Minimum Regulatory Standard (%)" 
+                    fill="#94a3b8" 
+                    radius={[6, 6, 0, 0]} 
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+
+        {/* ANALYTICAL DATA TABLE (RENDERED IN 'all' OR 'table' MODE) */}
+        {(benchmarkViewMode === 'all' || benchmarkViewMode === 'table') && (
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-800">
+                  Full Laboratory Assay Data
+                </span>
+                <h3 className="text-lg sm:text-xl font-bold text-zinc-900">
+                  Hydrometallurgical Parameters & Certification Table
+                </h3>
+              </div>
+              <span className="text-xs text-zinc-500 font-mono">
+                Verified under ASTM B29-19 & ISO 14001 Standards
+              </span>
+            </div>
+
+            <div className="overflow-x-auto rounded-2xl border border-zinc-200 shadow-sm">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead className="bg-zinc-900 text-white font-mono uppercase text-[11px]">
+                  <tr>
+                    <th className="py-3.5 px-4 font-bold tracking-wider">Technical Metric</th>
+                    <th className="py-3.5 px-4 font-bold tracking-wider text-emerald-400">VoltLoop Process</th>
+                    <th className="py-3.5 px-4 font-bold tracking-wider text-rose-400">Informal Smelting</th>
+                    <th className="py-3.5 px-4 font-bold tracking-wider">Environmental & Market Gain</th>
+                    <th className="py-3.5 px-4 font-bold tracking-wider">Standard / Test Method</th>
+                    <th className="py-3.5 px-4 font-bold tracking-wider text-center">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-200 bg-white">
+                  {PURITY_BENCHMARK_DATA.map((row, index) => (
+                    <tr key={index} className="hover:bg-emerald-50/40 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-zinc-900">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-[#15803D]" />
+                          <span>{row.parameter}</span>
+                        </div>
+                      </td>
+                      <td className="py-3.5 px-4 font-mono font-bold text-[#15803D] bg-emerald-50/30">
+                        <div className="flex items-center gap-1.5">
+                          <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3]" />
+                          <span>{row.voltDesc}</span>
+                        </div>
+                      </td>
+                      <td className="py-3.5 px-4 font-mono text-zinc-600">
+                        <div className="flex items-center gap-1.5">
+                          <X className="w-3.5 h-3.5 text-rose-600 stroke-[3]" />
+                          <span className="text-rose-700 font-medium">{row.informalDesc}</span>
+                        </div>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 font-bold font-mono text-[10px]">
+                          {row.gain}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4 font-mono text-zinc-500 text-[11px]">
+                        {row.testStandard}
+                      </td>
+                      <td className="py-3.5 px-4 text-center">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-mono font-bold text-[10px]">
+                          <FileCheck2 className="w-3 h-3 text-emerald-600" />
+                          <span>PASSED</span>
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </section>
     </div>
   );
 };
+

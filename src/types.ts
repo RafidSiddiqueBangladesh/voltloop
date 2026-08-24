@@ -28,6 +28,8 @@ export interface BatteryPickupRequest {
   notes?: string;
   createdAt: string;
   status: BatteryStatus;
+  agentName?: string;
+  agentPhone?: string;
   driverName?: string;
   driverPhone?: string;
   vehicleNumber?: string;
