@@ -11,8 +11,24 @@ import {
   Flame, 
   ArrowRight,
   Zap,
-  Info
+  Info,
+  ShieldCheck,
+  Factory,
+  BarChart2,
+  Wind,
+  Layers,
+  HeartPulse
 } from 'lucide-react';
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer, 
+  Legend 
+} from 'recharts';
 import { Language } from '../types';
 
 interface TheProblemViewProps {
@@ -27,111 +43,136 @@ export const TheProblemView: React.FC<TheProblemViewProps> = ({
   const [selectedYear, setSelectedYear] = useState<number>(2026);
 
   const projectionData = [
-    { year: 2020, fleet: '1.8M', churnBatteries: '7.2M', toxicLeadMT: '108,000 MT', informalShare: '88%' },
-    { year: 2022, fleet: '2.6M', churnBatteries: '10.4M', toxicLeadMT: '156,000 MT', informalShare: '85%' },
-    { year: 2024, fleet: '3.5M', churnBatteries: '14.0M', toxicLeadMT: '210,000 MT', informalShare: '81%' },
-    { year: 2026, fleet: '4.2M', churnBatteries: '17.6M', toxicLeadMT: '264,000 MT', informalShare: '76%' },
-    { year: 2028, fleet: '5.1M', churnBatteries: '21.4M', toxicLeadMT: '321,000 MT', informalShare: '55% (Targeted)' },
+    { year: 2020, fleet: '1.8M', churnBatteries: '7.2M', toxicLeadMT: '108,000 MT', informalShare: '88%', informalLead: 95, formalLead: 13 },
+    { year: 2022, fleet: '2.6M', churnBatteries: '10.4M', toxicLeadMT: '156,000 MT', informalShare: '85%', informalLead: 132, formalLead: 24 },
+    { year: 2024, fleet: '3.5M', churnBatteries: '14.0M', toxicLeadMT: '210,000 MT', informalShare: '81%', informalLead: 170, formalLead: 40 },
+    { year: 2026, fleet: '4.2M', churnBatteries: '17.6M', toxicLeadMT: '264,000 MT', informalShare: '76%', informalLead: 200, formalLead: 64 },
+    { year: 2028, fleet: '5.1M', churnBatteries: '21.4M', toxicLeadMT: '321,000 MT', informalShare: '55% (Targeted)', informalLead: 176, formalLead: 145 },
   ];
 
   const currentYearData = projectionData.find((p) => p.year === selectedYear) || projectionData[3];
 
   return (
     <div className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16 animate-in fade-in duration-300">
-      {/* Header Banner */}
-      <div className="max-w-3xl mx-auto text-center space-y-4">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-200 text-red-700 text-xs font-bold uppercase tracking-wider">
-          <AlertTriangle className="w-4 h-4 text-red-600" />
-          <span>{language === 'en' ? 'The Informal Recycling Crisis in Bangladesh' : 'অনানুষ্ঠানিক সিসা পুনর্ব্যবহারের সংকট'}</span>
+      {/* Header Banner - BIG BOLD GRAPHIC HERO */}
+      <div className="max-w-4xl mx-auto text-center space-y-5">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-100 border-2 border-red-300 text-red-800 text-xs sm:text-sm font-bold uppercase tracking-wider shadow-xs">
+          <AlertTriangle className="w-5 h-5 text-red-600 animate-bounce" />
+          <span>{language === 'en' ? 'The Informal Recycling Crisis in Bangladesh' : 'অনানুষ্ঠানিক সিসা পুনর্ব্যবহারের ভয়াবহ সংকট'}</span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading text-zinc-900 tracking-tight">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-heading text-zinc-900 tracking-tight leading-[1.1]">
           {language === 'en'
             ? "4 Million E-Rickshaws. A 260,000-Ton Toxic Lead Shadow."
             : '৪০ লাখ ই-রিকশা ও ২,৬০,০০০ টন বিষাক্ত সিসার সংকট'}
         </h1>
 
-        <p className="text-base sm:text-lg text-zinc-600 leading-relaxed">
+        <p className="text-lg sm:text-xl text-zinc-700 leading-relaxed font-medium">
           {language === 'en'
-            ? "Bangladesh's booming electric 3-wheeler (easy-bike) revolution has created unprecedented green urban mobility — but it has also triggered a catastrophic hazardous waste epidemic due to unlicensed, open-air lead smelting."
+            ? "Bangladesh's electric 3-wheeler (easy-bike) revolution has created green mobility — but open-air backyard lead smelting is releasing thousands of tons of neurotoxic heavy metals into residential communities."
             : 'সহজলভ্য ই-রিকশা বিপ্লব শহুরে যোগাযোগে স্বস্তি এনে দিলেও অনিবন্ধিত খোলা ভাট্টিতে ব্যাটারি গলানোর ফলে সৃষ্টি হয়েছে ভয়াবহ পরিবেশগত ও স্বাস্থ্য ঝুঁকি।'}
         </p>
       </div>
 
-      {/* THREE HAZARD PILLARS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-2xl p-6 border border-zinc-200 shadow-sm space-y-3">
-          <div className="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center">
-            <Flame className="w-6 h-6" />
+      {/* 4 GRAPHICAL HAZARD GAUGES WITH LARGE METRICS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Metric 1 */}
+        <div className="bg-gradient-to-br from-red-50 to-white rounded-3xl p-6 border-2 border-red-200 shadow-md space-y-3 relative overflow-hidden group hover:border-red-400 transition-all">
+          <div className="flex items-center justify-between">
+            <div className="w-12 h-12 rounded-2xl bg-red-600 text-white flex items-center justify-center shadow-md">
+              <Flame className="w-6 h-6" />
+            </div>
+            <span className="text-xs font-mono font-bold uppercase px-2.5 py-1 rounded-full bg-red-100 text-red-700">Air Crisis</span>
           </div>
-          <h3 className="text-lg font-bold text-zinc-900">
-            {language === 'en' ? 'Backyard Open Smelting' : 'অনাবৃত চুলা ও মারাত্মক ধোঁয়া'}
+          <span className="text-3xl sm:text-4xl font-black font-mono text-red-950 block tracking-tight">
+            &gt;65 µg/dL
+          </span>
+          <h3 className="font-bold text-zinc-900 text-base">
+            {language === 'en' ? 'Worker Blood Lead Levels' : 'শ্রমিকদের রক্তে সিসার মাত্রা'}
           </h3>
           <p className="text-xs text-zinc-600 leading-relaxed">
-            {language === 'en'
-              ? 'Informal scrappers break battery casings with axes in residential backyards and melt lead plates over open charcoal fires without filters, venting neurotoxic lead fumes directly into the atmosphere.'
-              : 'আবাসিক এলাকায় কুড়াল দিয়ে ব্যাটারি ভেঙে খোলা কয়লার আগুনে সিসা গলানো হয়, যা কোনো ফিল্টার ছাড়াই বিষাক্ত ধোঁয়া বাতাসে ছড়িয়ে দেয়।'}
+            {language === 'en' ? 'Informal smelters operate open charcoal furnaces with zero baghouse filtration.' : 'খোলা কয়লার আগুনে গলানোর ফলে বাতাসে মারাত্মক বিষাক্ত ধোঁয়া ছড়ায়।'}
           </p>
-          <div className="pt-2 border-t border-zinc-100 text-[11px] font-semibold text-red-700">
-            • {language === 'en' ? 'Extreme worker blood lead levels (>65 µg/dL)' : 'শ্রমিকদের রক্তে অতিরিক্ত সিসা'}
-          </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-zinc-200 shadow-sm space-y-3">
-          <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
-            <Droplet className="w-6 h-6" />
+        {/* Metric 2 */}
+        <div className="bg-gradient-to-br from-amber-50 to-white rounded-3xl p-6 border-2 border-amber-200 shadow-md space-y-3 relative overflow-hidden group hover:border-amber-400 transition-all">
+          <div className="flex items-center justify-between">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-md">
+              <Droplet className="w-6 h-6" />
+            </div>
+            <span className="text-xs font-mono font-bold uppercase px-2.5 py-1 rounded-full bg-amber-100 text-amber-800">Water Crisis</span>
           </div>
-          <h3 className="text-lg font-bold text-zinc-900">
-            {language === 'en' ? 'Acid Dumping in Open Drains' : 'খোলা ড্রেনে অ্যাসিড ফেলা'}
+          <span className="text-3xl sm:text-4xl font-black font-mono text-amber-950 block tracking-tight">
+            35M+ Liters
+          </span>
+          <h3 className="font-bold text-zinc-900 text-base">
+            {language === 'en' ? 'Raw Acid Dumped Annually' : 'বার্ষিক খোলা ড্রেনে অ্যাসিড বর্জ্য'}
           </h3>
           <p className="text-xs text-zinc-600 leading-relaxed">
-            {language === 'en'
-              ? 'Millions of liters of raw sulfuric acid electrolyte are dumped directly into soil, canals, and Buriganga/Turag tributaries without chemical neutralization, destroying arable topsoil and aquatic life.'
-              : 'প্রতি বছর লাখ লাখ লিটার বিষাক্ত অ্যাসিড সরাসরি মাটি ও নদী-নালায় ফেলা হচ্ছে, যা ভূগর্ভস্থ পানি ও কৃষিজমিকে চিরতরে নষ্ট করছে।'}
+            {language === 'en' ? 'Sulfuric acid electrolyte poured untreated into soil and Buriganga/Turag canals.' : 'লাখ লাখ লিটার অ্যাসিড মাটি ও নদী-নালায় ফেলা হচ্ছে।'}
           </p>
-          <div className="pt-2 border-t border-zinc-100 text-[11px] font-semibold text-amber-800">
-            • {language === 'en' ? 'Over 35M Liters raw acid dumped/yr' : 'বছরে ৩৫+ মিলিয়ন লিটার অ্যাসিড বর্জ্য'}
-          </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-zinc-200 shadow-sm space-y-3">
-          <div className="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
-            <Skull className="w-6 h-6" />
+        {/* Metric 3 */}
+        <div className="bg-gradient-to-br from-purple-50 to-white rounded-3xl p-6 border-2 border-purple-200 shadow-md space-y-3 relative overflow-hidden group hover:border-purple-400 transition-all">
+          <div className="flex items-center justify-between">
+            <div className="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center shadow-md">
+              <HeartPulse className="w-6 h-6" />
+            </div>
+            <span className="text-xs font-mono font-bold uppercase px-2.5 py-1 rounded-full bg-purple-100 text-purple-800">Child Health</span>
           </div>
-          <h3 className="text-lg font-bold text-zinc-900">
-            {language === 'en' ? 'Child Cognitive Impairment' : 'শিশুদের স্নায়বিক ক্ষতি'}
+          <span className="text-3xl sm:text-4xl font-black font-mono text-purple-950 block tracking-tight">
+            3.6 Million
+          </span>
+          <h3 className="font-bold text-zinc-900 text-base">
+            {language === 'en' ? 'Children at Neurological Risk' : 'শিশুদের স্নায়বিক ও মেধা ক্ষতি'}
           </h3>
           <p className="text-xs text-zinc-600 leading-relaxed">
-            {language === 'en'
-              ? 'Lead deposits in dust and crops near informal cluster zones (Zinjira, Demra, Tongi, Bogura) lead to irreversible IQ reduction, behavioral disorders, and developmental stunt in children.'
-              : 'সিসা মিশ্রিত ধুলাবালি ও ফসলের কারণে শিশুদের মস্তিষ্কের বিকাশ বাধাগ্রস্ত হচ্ছে এবং বুদ্ধিমত্তা (IQ) স্থায়ীভাবে ক্ষতিগ্রস্ত হচ্ছে।'}
+            {language === 'en' ? 'Lead dust in crop soil causes irreversible IQ deficit and developmental stunt.' : 'সিসা মিশ্রিত ধুলাবালি শিশুদের মস্তিষ্কের বিকাশ চিরতরে ক্ষতিগ্রস্ত করে।'}
           </p>
-          <div className="pt-2 border-t border-zinc-100 text-[11px] font-semibold text-purple-800">
-            • {language === 'en' ? 'Estimated $16B annual GDP loss' : 'জাতীয় অর্থনীতিতে বিশাল ক্ষতি'}
+        </div>
+
+        {/* Metric 4 */}
+        <div className="bg-gradient-to-br from-zinc-50 to-white rounded-3xl p-6 border-2 border-zinc-300 shadow-md space-y-3 relative overflow-hidden group hover:border-zinc-500 transition-all">
+          <div className="flex items-center justify-between">
+            <div className="w-12 h-12 rounded-2xl bg-zinc-900 text-white flex items-center justify-center shadow-md">
+              <TrendingUp className="w-6 h-6" />
+            </div>
+            <span className="text-xs font-mono font-bold uppercase px-2.5 py-1 rounded-full bg-zinc-200 text-zinc-800">Economic Loss</span>
           </div>
+          <span className="text-3xl sm:text-4xl font-black font-mono text-zinc-950 block tracking-tight">
+            $16 Billion
+          </span>
+          <h3 className="font-bold text-zinc-900 text-base">
+            {language === 'en' ? 'Annual Bangladesh GDP Drain' : 'জাতীয় অর্থনীতির ক্ষতি/বছর'}
+          </h3>
+          <p className="text-xs text-zinc-600 leading-relaxed">
+            {language === 'en' ? 'Healthcare expenses and lost adult cognitive productivity from chronic exposure.' : 'চিকিৎসা ব্যয় ও মেধার স্থায়ী ক্ষতির ফলে জাতীয় অর্থনীতি ক্ষতিগ্রস্ত।'}
+          </p>
         </div>
       </div>
 
-      {/* INTERACTIVE DATA VISUALIZATION: FLEET SIZE VS LEAD CHURN */}
-      <section className="bg-white rounded-3xl p-6 sm:p-10 border border-zinc-200 shadow-lg space-y-8">
+      {/* INTERACTIVE DATA VISUALIZATION: BAR CHART FOR CHURN & INFORMAL POLLUTION */}
+      <section className="bg-white rounded-3xl p-6 sm:p-10 border-2 border-zinc-200 shadow-xl space-y-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-200 pb-6">
           <div>
             <span className="text-xs font-mono font-bold text-[#15803D] uppercase tracking-wider">
-              {language === 'en' ? 'Bangladesh Fleet & Churn Data' : 'ই-রিকশা ফ্লিট ও ব্যাটারি ডাটা মডেল'}
+              {language === 'en' ? 'Historical & Projected Modeling' : 'ডাটা গ্রাফ ও পূর্বাভাস'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black font-heading text-zinc-900">
-              {language === 'en' ? 'E-Rickshaw Growth vs. Annual Dead Battery Churn' : 'ফ্লিট বৃদ্ধি বনাম বার্ষিক মৃত ব্যাটারির বিস্তার'}
+              {language === 'en' ? 'Informal Smelting vs. VoltLoop Certified Recovery (k MT)' : 'অনানুষ্ঠানিক দূষণ বনাম ভোল্টলুপ সার্কুলার রূপান্তর'}
             </h2>
           </div>
 
-          <div className="flex items-center gap-1.5 bg-zinc-100 p-1 rounded-xl">
+          <div className="flex items-center gap-1.5 bg-zinc-100 p-1.5 rounded-2xl border border-zinc-200">
             {projectionData.map((d) => (
               <button
                 key={d.year}
                 onClick={() => setSelectedYear(d.year)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                   selectedYear === d.year
-                    ? 'bg-[#15803D] text-white shadow-xs'
+                    ? 'bg-[#107C2B] text-white shadow-md'
                     : 'text-zinc-700 hover:bg-zinc-200'
                 }`}
               >
@@ -143,119 +184,111 @@ export const TheProblemView: React.FC<TheProblemViewProps> = ({
 
         {/* Selected Year Key Metrics Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-zinc-50 p-4.5 rounded-xl border border-zinc-200">
-            <span className="text-xs text-zinc-500 block">{language === 'en' ? 'Active E-Rickshaws' : 'সক্রিয় ই-রিকশা'}</span>
-            <span className="text-2xl font-black font-mono text-zinc-900">{currentYearData.fleet}</span>
-            <span className="text-[11px] text-zinc-400 block">4-5 batteries / vehicle</span>
+          <div className="bg-zinc-50 p-5 rounded-2xl border border-zinc-200">
+            <span className="text-xs text-zinc-500 font-bold block mb-1">{language === 'en' ? 'Active E-Rickshaws' : 'সক্রিয় ই-রিকশা'}</span>
+            <span className="text-3xl font-black font-mono text-zinc-900">{currentYearData.fleet}</span>
+            <span className="text-xs text-zinc-500 block mt-1">4-5 batteries / vehicle</span>
           </div>
 
-          <div className="bg-amber-50/70 p-4.5 rounded-xl border border-amber-200">
-            <span className="text-xs text-amber-800 block">{language === 'en' ? 'Batteries Scrapped/Yr' : 'বার্ষিক বাতিল ব্যাটারি'}</span>
-            <span className="text-2xl font-black font-mono text-amber-950">{currentYearData.churnBatteries}</span>
-            <span className="text-[11px] text-amber-700 block">Avg life: 8-10 months</span>
+          <div className="bg-amber-50 p-5 rounded-2xl border border-amber-200">
+            <span className="text-xs text-amber-800 font-bold block mb-1">{language === 'en' ? 'Batteries Scrapped/Yr' : 'বার্ষিক বাতিল ব্যাটারি'}</span>
+            <span className="text-3xl font-black font-mono text-amber-950">{currentYearData.churnBatteries}</span>
+            <span className="text-xs text-amber-700 block mt-1">Avg life: 8-10 months</span>
           </div>
 
-          <div className="bg-red-50/70 p-4.5 rounded-xl border border-red-200">
-            <span className="text-xs text-red-800 block">{language === 'en' ? 'Total Toxic Lead Mass' : 'মোট সিসা বর্জ্য ভর'}</span>
-            <span className="text-2xl font-black font-mono text-red-950">{currentYearData.toxicLeadMT}</span>
-            <span className="text-[11px] text-red-700 block">High smelting hazard</span>
+          <div className="bg-red-50 p-5 rounded-2xl border border-red-200">
+            <span className="text-xs text-red-800 font-bold block mb-1">{language === 'en' ? 'Total Toxic Lead Mass' : 'মোট সিসা বর্জ্য ভর'}</span>
+            <span className="text-3xl font-black font-mono text-red-950">{currentYearData.toxicLeadMT}</span>
+            <span className="text-xs text-red-700 block mt-1">Hazardous lead inventory</span>
           </div>
 
-          <div className="bg-emerald-50/70 p-4.5 rounded-xl border border-emerald-200">
-            <span className="text-xs text-emerald-800 block">{language === 'en' ? 'Informal Middlemen Share' : 'অনানুষ্ঠানিক বাজারের অংশ'}</span>
-            <span className="text-2xl font-black font-mono text-emerald-950">{currentYearData.informalShare}</span>
-            <span className="text-[11px] text-emerald-700 block">Targeting formal transition</span>
+          <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-200">
+            <span className="text-xs text-emerald-800 font-bold block mb-1">{language === 'en' ? 'Informal Market Share' : 'অনানুষ্ঠানিক বাজারের অংশ'}</span>
+            <span className="text-3xl font-black font-mono text-emerald-950">{currentYearData.informalShare}</span>
+            <span className="text-xs text-emerald-700 block mt-1">Transitioning to VoltLoop</span>
           </div>
         </div>
 
-        {/* Visual Bar Comparison Chart */}
-        <div className="space-y-4 pt-2">
-          <h4 className="text-xs font-bold text-zinc-500 uppercase tracking-wider">
-            {language === 'en' ? 'Annual Battery Scrapping Volume (2020 - 2028 Projection in Millions of Units)' : 'বার্ষিক ব্যাটারি বাতিল হওয়ার তুলনামূলক গ্রাফ'}
-          </h4>
-
-          <div className="space-y-3">
-            {projectionData.map((d) => {
-              const numVal = parseFloat(d.churnBatteries);
-              const maxVal = 22;
-              const percent = (numVal / maxVal) * 100;
-              const isSelected = d.year === selectedYear;
-
-              return (
-                <div key={d.year} className="space-y-1">
-                  <div className="flex justify-between text-xs font-mono">
-                    <span className={`font-bold ${isSelected ? 'text-[#15803D]' : 'text-zinc-700'}`}>
-                      {d.year}: {d.fleet} Fleet
-                    </span>
-                    <span className="font-semibold text-zinc-900">{d.churnBatteries} Batteries ({d.toxicLeadMT})</span>
-                  </div>
-                  <div className="w-full bg-zinc-100 h-6 rounded-lg overflow-hidden flex">
-                    <div
-                      className={`h-full transition-all duration-500 rounded-lg flex items-center px-3 text-[10px] font-mono font-bold text-white ${
-                        isSelected ? 'bg-[#15803D]' : 'bg-zinc-700'
-                      }`}
-                      style={{ width: `${percent}%` }}
-                    >
-                      {d.churnBatteries}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+        {/* Visual Recharts Bar Chart */}
+        <div className="h-80 w-full pt-4">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={projectionData}
+              margin={{ top: 10, right: 20, left: -10, bottom: 0 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+              <XAxis dataKey="year" stroke="#64748b" fontSize={13} fontWeight="bold" />
+              <YAxis stroke="#64748b" fontSize={12} unit="k MT" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#0A160E',
+                  borderColor: '#107C2B',
+                  borderRadius: '16px',
+                  color: '#ffffff',
+                  fontSize: '12px',
+                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.4)',
+                }}
+                formatter={(value: any, name: any) => [`${value},000 MT`, name]}
+              />
+              <Legend wrapperStyle={{ paddingTop: '16px', fontSize: '13px', fontWeight: 'bold' }} />
+              <Bar dataKey="informalLead" name="Toxic Informal Smelting & Leakage (k MT)" fill="#DC2626" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="formalLead" name="VoltLoop Certified Clean Recovery (k MT)" fill="#107C2B" radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </section>
 
-      {/* COMPARISON MATRIX: INFORMAL DEALERS VS VOLTLOOP */}
-      <section className="bg-white rounded-3xl p-6 sm:p-10 border border-zinc-200 shadow-sm space-y-6">
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs font-bold font-mono text-[#15803D] uppercase tracking-wider">
-            {language === 'en' ? 'Direct Operational Comparison' : 'পদ্ধতিগত পার্থক্য'}
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-black font-heading text-zinc-900">
+      {/* GRAPHICAL COMPARISON MATRIX: INFORMAL DEALERS VS VOLTLOOP */}
+      <section className="bg-white rounded-3xl p-6 sm:p-10 border-2 border-zinc-200 shadow-xl space-y-8">
+        <div className="text-center max-w-3xl mx-auto space-y-2">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 text-[#107C2B] text-xs font-mono font-bold uppercase tracking-wider">
+            <ShieldCheck className="w-4 h-4" />
+            <span>{language === 'en' ? 'Direct Operational Comparison' : 'পদ্ধতিগত পার্থক্য'}</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black font-heading text-zinc-900">
             {language === 'en' ? 'Informal Scrap Dealers vs. VoltLoop Certified Network' : 'দালাল নেটওয়ার্ক বনাম ভোল্টলুপ সার্কুলার সিস্টেম'}
           </h2>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs sm:text-sm">
+          <table className="w-full text-left border-collapse text-sm sm:text-base">
             <thead>
-              <tr className="border-b-2 border-zinc-200 bg-zinc-50">
-                <th className="py-3 px-4 font-bold text-zinc-700">Parameter</th>
-                <th className="py-3 px-4 font-bold text-red-700 bg-red-50/50">Informal Middlemen & Smelters</th>
-                <th className="py-3 px-4 font-bold text-[#15803D] bg-emerald-50/60">VoltLoop Closed-Loop Network</th>
+              <tr className="border-b-2 border-zinc-300 bg-zinc-100">
+                <th className="py-4 px-5 font-black text-zinc-800">Operational Dimension</th>
+                <th className="py-4 px-5 font-black text-red-700 bg-red-100/60">Informal Middlemen & Smelters</th>
+                <th className="py-4 px-5 font-black text-[#107C2B] bg-emerald-100/70">VoltLoop Closed-Loop Network</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200">
               <tr>
-                <td className="py-3.5 px-4 font-semibold text-zinc-900">Garage Payout</td>
-                <td className="py-3.5 px-4 text-zinc-600">Unregulated, suppressed pricing (৳2,800 - ৳3,000)</td>
-                <td className="py-3.5 px-4 font-bold text-[#15803D] bg-emerald-50/30">Guaranteed wholesale rate (৳3,400 - ৳4,100+)</td>
+                <td className="py-4 px-5 font-bold text-zinc-900">Garage Unit Payout</td>
+                <td className="py-4 px-5 text-zinc-600">Suppressed & fluctuating rates (~৳1,750 / unit)</td>
+                <td className="py-4 px-5 font-black text-[#107C2B] bg-emerald-50/40">Guaranteed ৳2,150 / unit + instant mobile bKash</td>
               </tr>
               <tr>
-                <td className="py-3.5 px-4 font-semibold text-zinc-900">Weighing Method</td>
-                <td className="py-3.5 px-4 text-zinc-600">Rigged manual spring scales, weight shaved by 15-20%</td>
-                <td className="py-3.5 px-4 font-bold text-zinc-900 bg-emerald-50/30">Calibrated digital Bluetooth gate scale with instant receipt</td>
+                <td className="py-4 px-5 font-bold text-zinc-900">Weighing Precision</td>
+                <td className="py-4 px-5 text-zinc-600">Rigged manual spring scales (shaves 15-20% weight)</td>
+                <td className="py-4 px-5 font-bold text-zinc-900 bg-emerald-50/40">Bluetooth calibrated gate scales with printed digital slip</td>
               </tr>
               <tr>
-                <td className="py-3.5 px-4 font-semibold text-zinc-900">Acid Electrolyte</td>
-                <td className="py-3.5 px-4 text-red-600 font-medium">Dumped untreated into soil, ponds, and open storm drains</td>
-                <td className="py-3.5 px-4 font-bold text-[#15803D] bg-emerald-50/30">100% neutralized with calcium carbonate into industrial gypsum</td>
+                <td className="py-4 px-5 font-bold text-zinc-900">Acid Electrolyte</td>
+                <td className="py-4 px-5 text-red-600 font-bold">Dumped untreated into soil, ponds, and storm drains</td>
+                <td className="py-4 px-5 font-bold text-[#107C2B] bg-emerald-50/40">100% neutralized into commercial non-toxic gypsum</td>
               </tr>
               <tr>
-                <td className="py-3.5 px-4 font-semibold text-zinc-900">Smelting Technology</td>
-                <td className="py-3.5 px-4 text-zinc-600">Open-pot charcoal kilns with zero filters</td>
-                <td className="py-3.5 px-4 font-bold text-zinc-900 bg-emerald-50/30">Negative-pressure hydrometallurgical rotary furnaces + baghouse filters</td>
+                <td className="py-4 px-5 font-bold text-zinc-900">Smelting Technology</td>
+                <td className="py-4 px-5 text-zinc-600">Open-pot charcoal kilns with zero filters</td>
+                <td className="py-4 px-5 font-bold text-zinc-900 bg-emerald-50/40">Negative-pressure automated chambers + baghouse scrubbers</td>
               </tr>
               <tr>
-                <td className="py-3.5 px-4 font-semibold text-zinc-900">Refined Lead Purity</td>
-                <td className="py-3.5 px-4 text-zinc-600">92-95% contaminated crude bullion</td>
-                <td className="py-3.5 px-4 font-bold text-[#15803D] bg-emerald-50/30">99.97% refined pure secondary lead (LME standard)</td>
+                <td className="py-4 px-5 font-bold text-zinc-900">Refined Lead Purity</td>
+                <td className="py-4 px-5 text-zinc-600">92-95% contaminated crude bullion</td>
+                <td className="py-4 px-5 font-black text-[#107C2B] bg-emerald-50/40">99.97% LME Certified Pure Secondary Lead Ingots</td>
               </tr>
               <tr>
-                <td className="py-3.5 px-4 font-semibold text-zinc-900">Regulatory Compliance</td>
-                <td className="py-3.5 px-4 text-red-600 font-medium">Illegal, vulnerable to police & DoE crackdowns</td>
-                <td className="py-3.5 px-4 font-bold text-emerald-800 bg-emerald-50/30">Full Extended Producer Responsibility (EPR) & ISO 14001 certified</td>
+                <td className="py-4 px-5 font-bold text-zinc-900">Compliance & EPR</td>
+                <td className="py-4 px-5 text-red-600 font-bold">Illegal, vulnerable to police & DoE crackdowns</td>
+                <td className="py-4 px-5 font-bold text-emerald-800 bg-emerald-50/40">ISO 14001, DoE License, Full EPR & Scope-3 Certification</td>
               </tr>
             </tbody>
           </table>
@@ -264,10 +297,11 @@ export const TheProblemView: React.FC<TheProblemViewProps> = ({
         <div className="text-center pt-4">
           <button
             onClick={onOpenSellModal}
-            className="px-8 py-3.5 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white font-bold text-sm inline-flex items-center gap-2 shadow-md transition-colors cursor-pointer"
+            className="px-8 py-4 rounded-2xl bg-[#107C2B] hover:bg-[#0d6423] text-white font-black text-base inline-flex items-center gap-3 shadow-xl transition-all hover:scale-105 cursor-pointer"
           >
-            <Zap className="w-4 h-4 fill-white" />
-            <span>{language === 'en' ? 'Switch to VoltLoop — Sell Your Dead Batteries' : 'ভোল্টলুপে ব্যাটারি বিক্রি করে সর্বোচ্চ লাভ নিন'}</span>
+            <Zap className="w-5 h-5 fill-white" />
+            <span>{language === 'en' ? 'Switch to VoltLoop — Sell Your Dead Batteries at ৳2,150' : 'ভোল্টলুপে ব্যাটারি বিক্রি করুন — নিশ্চিত ৳২,১৫০ দর'}</span>
+            <ArrowRight className="w-5 h-5" />
           </button>
         </div>
       </section>

@@ -19,7 +19,13 @@ import {
   Building2,
   Users,
   Navigation,
-  BarChart3
+  BarChart3,
+  AlertTriangle,
+  Skull,
+  Droplets,
+  Flame,
+  ShieldAlert,
+  PieChart as PieIcon
 } from 'lucide-react';
 import { 
   LineChart, 
@@ -29,7 +35,10 @@ import {
   CartesianGrid, 
   Tooltip, 
   ResponsiveContainer,
-  Legend
+  Legend,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 import { ImpactStats, Language, PageView } from '../types';
 import { BATTERY_TYPES, PRICE_TREND_DATA } from '../data/mockData';
@@ -73,7 +82,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
             {/* Tagline Badge */}
             <div className="liquid-glass inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-[#15803D] text-xs sm:text-sm font-bold shadow-xs border border-emerald-500/30">
               <span className="w-2.5 h-2.5 rounded-full bg-[#15803D] animate-ping" />
-              <span>{language === 'en' ? '"Every dead battery, given a second Volt."' : '"প্রতিটি মৃত ব্যাটারির নতুন ভোল্ট জীবন।"'}</span>
+              <span>
+                {language === 'en' 
+                  ? 'VoltLoop: Turning Toxic Strains into Economic Gains.' 
+                  : 'ভোল্টলুপ: পরিবেশ দূষণ রোধ ও টেকসই অর্থনৈতিক সমৃদ্ধি।'}
+              </span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-heading text-zinc-900 tracking-tight leading-[1.08]">
@@ -229,62 +242,231 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </section>
 
-      {/* IMPACT SNAPSHOT TICKER BAR */}
-      <section className="bg-[#0A160E] text-white py-12 px-4 sm:px-6 lg:px-8 border-y border-emerald-900/50 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto space-y-6 relative z-10">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 flex items-center gap-2 font-bold">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              {language === 'en' ? 'Verified Environmental Impact Snapshot' : 'লাইভ সার্কুলার অর্থনীতি মেট্রিকস'}
-            </span>
-            <span className="text-xs text-zinc-400 font-mono">
-              {language === 'en' ? 'ISO 14001 & Basel Convention Compliant' : 'আইএসও ১৪০০১ মান অনুযায়ী প্রত্যয়িত'}
-            </span>
+      {/* VERIFIED ENVIRONMENTAL IMPACT SNAPSHOT WITH FLOATING PIE CHART & RICH GRAPHICS */}
+      <section className="bg-radial from-[#0e2716] via-[#08170e] to-[#040a06] text-white py-14 sm:py-20 px-4 sm:px-6 lg:px-8 border-y border-emerald-900/60 relative overflow-hidden shadow-2xl">
+        {/* Ambient background glow and grid */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto space-y-10 relative z-10">
+          {/* Header Bar */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-emerald-900/60 pb-6">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/90 border border-emerald-500/40 text-emerald-400 text-xs font-mono font-bold uppercase tracking-wider shadow-inner">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                <PieIcon className="w-4 h-4 text-emerald-400" />
+                <span>{language === 'en' ? 'Verified Environmental Impact Snapshot' : 'লাইভ পরিবেশগত প্রভাব ও সার্কুলার মেট্রিকস'}</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading text-white tracking-tight">
+                {language === 'en' ? '100% Material Recovery & Toxicity Elimination' : 'শতভাগ কাঁচামাল পুনরুদ্ধার ও দূষণমুক্ত সমাধান'}
+              </h2>
+            </div>
+            <div className="flex items-center gap-2 text-xs font-mono text-emerald-400/90 bg-emerald-950/60 px-3.5 py-2 rounded-xl border border-emerald-900/80">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>{language === 'en' ? 'ISO 14001 • DoE & Basel Convention Certified' : 'আইএসও ১৪০০১ ও পরিবেশ অধিদপ্তর প্রত্যয়িত'}</span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-zinc-900/90 p-5 rounded-2xl border border-zinc-800/80 shadow-lg">
-              <span className="text-xs text-zinc-400 block mb-1">
+          {/* 4 Primary Big Impact Numbers */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="bg-zinc-900/90 hover:bg-zinc-900 transition-all p-5 sm:p-6 rounded-3xl border border-emerald-900/50 shadow-xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all" />
+              <span className="text-xs text-zinc-400 block font-medium mb-1.5">
                 {language === 'en' ? 'Dead Batteries Diverted' : 'সংগৃহীত মৃত ব্যাটারি'}
               </span>
-              <div className="text-2xl sm:text-3xl font-black font-mono text-white tracking-tight">
+              <div className="text-3xl sm:text-4xl lg:text-5xl font-black font-mono text-white tracking-tight">
                 {impactStats.batteriesCollected.toLocaleString()}+
               </div>
-              <span className="text-[11px] text-emerald-400 font-medium">
-                {language === 'en' ? 'Zero backyard dumping' : 'পরিবেশ দূষণ রোধ'}
-              </span>
+              <div className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-800/60">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>{language === 'en' ? 'Zero backyard dumping' : 'পরিবেশ দূষণ রোধ'}</span>
+              </div>
             </div>
 
-            <div className="bg-zinc-900/90 p-5 rounded-2xl border border-zinc-800/80 shadow-lg">
-              <span className="text-xs text-zinc-400 block mb-1">
+            <div className="bg-zinc-900/90 hover:bg-zinc-900 transition-all p-5 sm:p-6 rounded-3xl border border-emerald-900/50 shadow-xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-400/10 rounded-full blur-xl group-hover:bg-emerald-400/20 transition-all" />
+              <span className="text-xs text-zinc-400 block font-medium mb-1.5">
                 {language === 'en' ? 'Refined Lead Recovered' : 'নিষ্কাশিত বিশুদ্ধ সিসা'}
               </span>
-              <div className="text-2xl sm:text-3xl font-black font-mono text-emerald-400 tracking-tight">
-                {impactStats.leadRecoveredMT.toLocaleString()} <span className="text-sm font-sans text-zinc-400">MT</span>
+              <div className="text-3xl sm:text-4xl lg:text-5xl font-black font-mono text-emerald-400 tracking-tight">
+                {impactStats.leadRecoveredMT.toLocaleString()} <span className="text-base sm:text-lg font-sans text-zinc-400">MT</span>
               </div>
-              <span className="text-[11px] text-zinc-400 font-mono">99.97% LME Purity</span>
+              <div className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-mono text-zinc-300 bg-zinc-800/80 px-2.5 py-1 rounded-lg border border-zinc-700">
+                <span>99.97% LME Pure Ingots</span>
+              </div>
             </div>
 
-            <div className="bg-zinc-900/90 p-5 rounded-2xl border border-zinc-800/80 shadow-lg">
-              <span className="text-xs text-zinc-400 block mb-1">
-                {language === 'en' ? 'Active Garage Partners' : 'নিবন্ধিত গ্যারেজ পার্টনার'}
-              </span>
-              <div className="text-2xl sm:text-3xl font-black font-mono text-white tracking-tight">
-                {impactStats.activeGarages.toLocaleString()}+
-              </div>
-              <span className="text-[11px] text-emerald-400 font-medium">
-                {language === 'en' ? 'Dhaka, Tongi, Narayanganj' : 'ঢাকা, টঙ্গী, নারায়ণগঞ্জ'}
-              </span>
-            </div>
-
-            <div className="bg-zinc-900/90 p-5 rounded-2xl border border-zinc-800/80 shadow-lg">
-              <span className="text-xs text-zinc-400 block mb-1">
+            <div className="bg-zinc-900/90 hover:bg-zinc-900 transition-all p-5 sm:p-6 rounded-3xl border border-emerald-900/50 shadow-xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-teal-500/10 rounded-full blur-xl group-hover:bg-teal-500/20 transition-all" />
+              <span className="text-xs text-zinc-400 block font-medium mb-1.5">
                 {language === 'en' ? 'Toxic Acid Neutralized' : 'নিষ্ক্রিয়কৃত সালফিউরিক অ্যাসিড'}
               </span>
-              <div className="text-2xl sm:text-3xl font-black font-mono text-teal-400 tracking-tight">
-                {(impactStats.acidNeutralizedLiters / 1000).toFixed(0)}k <span className="text-sm font-sans text-zinc-400">Liters</span>
+              <div className="text-3xl sm:text-4xl lg:text-5xl font-black font-mono text-teal-300 tracking-tight">
+                {(impactStats.acidNeutralizedLiters / 1000).toFixed(0)}k <span className="text-base sm:text-lg font-sans text-zinc-400">Liters</span>
               </div>
-              <span className="text-[11px] text-zinc-400">100% neutralized to gypsum</span>
+              <div className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-semibold text-teal-300 bg-teal-950/80 px-2.5 py-1 rounded-lg border border-teal-800/60">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>100% neutralized to gypsum</span>
+              </div>
+            </div>
+
+            <div className="bg-zinc-900/90 hover:bg-zinc-900 transition-all p-5 sm:p-6 rounded-3xl border border-emerald-900/50 shadow-xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-xl group-hover:bg-amber-500/20 transition-all" />
+              <span className="text-xs text-zinc-400 block font-medium mb-1.5">
+                {language === 'en' ? 'Registered Partner Garages' : 'নিবন্ধিত গ্যারেজ পার্টনার'}
+              </span>
+              <div className="text-3xl sm:text-4xl lg:text-5xl font-black font-mono text-amber-300 tracking-tight">
+                {impactStats.activeGarages.toLocaleString()}+
+              </div>
+              <div className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-semibold text-amber-300 bg-amber-950/80 px-2.5 py-1 rounded-lg border border-amber-800/60">
+                <MapPin className="w-3.5 h-3.5" />
+                <span>Dhaka, Tongi, Gazipur</span>
+              </div>
+            </div>
+          </div>
+
+          {/* FLOATING PIE CHART & CIRCULAR MATERIAL RECOVERY VISUAL */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-zinc-950/90 rounded-3xl p-6 sm:p-10 border border-emerald-900/60 shadow-2xl relative">
+            {/* Left: Floating Interactive Pie Chart */}
+            <div className="lg:col-span-6 flex flex-col items-center justify-center relative">
+              <div className="text-center space-y-1 mb-3">
+                <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest">
+                  {language === 'en' ? 'Battery Mass Conversion Efficiency' : 'উপাদান পুনর্ব্যবহার অনুপাত'}
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black text-white">
+                  {language === 'en' ? 'Zero-Waste Closed Recovery Loop' : 'শূন্য-বর্জ্য সার্কুলার রূপান্তর'}
+                </h3>
+              </div>
+
+              {/* Floating Pie Container with Central Value */}
+              <div className="relative w-full h-72 sm:h-80 flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Tooltip
+                      content={({ active, payload }) => {
+                        if (active && payload && payload.length) {
+                          const data = payload[0].payload;
+                          return (
+                            <div className="bg-[#0A160E] border-2 border-emerald-500 p-3 rounded-2xl shadow-2xl text-white font-mono text-xs space-y-1">
+                              <p className="font-bold text-sm text-emerald-300">{data.name}</p>
+                              <p className="text-zinc-200">Share: <span className="font-bold text-white text-base">{data.value}%</span> of total weight</p>
+                              <p className="text-emerald-400 font-semibold">{data.sub}</p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Pie
+                      data={[
+                        { name: 'Refined Secondary Lead (99.97%)', value: 65, color: '#107C2B', sub: '1,936 MT Pure Ingots to Battery Makers' },
+                        { name: 'Neutralized Gypsum (Sulfuric Acid)', value: 18, color: '#0EA5E9', sub: '412,000 L Acid Neutralized to Gypsum' },
+                        { name: 'Polypropylene (PP) Polymer Casing', value: 12, color: '#F59E0B', sub: '358 MT High-Impact Casing Pellets' },
+                        { name: 'Copper & Alloy Terminals', value: 5, color: '#8B5CF6', sub: '148 MT Heavy Hardware Salvaged' },
+                      ]}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={75}
+                      outerRadius={115}
+                      paddingAngle={4}
+                      dataKey="value"
+                      stroke="#040a06"
+                      strokeWidth={3}
+                    >
+                      <Cell key="cell-0" fill="#107C2B" />
+                      <Cell key="cell-1" fill="#0EA5E9" />
+                      <Cell key="cell-2" fill="#F59E0B" />
+                      <Cell key="cell-3" fill="#8B5CF6" />
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+
+                {/* Floating Center Badge inside Donut */}
+                <div className="absolute inset-0 m-auto w-32 h-32 rounded-full bg-[#07130A] border-2 border-emerald-500/50 flex flex-col items-center justify-center text-center shadow-lg pointer-events-none animate-pulse">
+                  <span className="text-[10px] font-mono uppercase text-emerald-400 font-bold tracking-wider">Efficiency</span>
+                  <span className="text-2xl font-black font-mono text-white">99.4%</span>
+                  <span className="text-[9px] text-zinc-400 font-medium">Material Circularity</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Graphic Breakdown Cards */}
+            <div className="lg:col-span-6 space-y-3.5">
+              <div className="p-4 rounded-2xl bg-zinc-900/90 border border-emerald-600/40 flex items-center justify-between gap-4 hover:border-emerald-500 transition-all">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#107C2B]/20 text-emerald-400 flex items-center justify-center font-bold text-base border border-[#107C2B]/40">
+                    65%
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm sm:text-base">
+                      {language === 'en' ? 'Refined Secondary Lead (99.97% LME)' : 'নিষ্কাশিত বিশুদ্ধ সিসা (৯৯.৯৭%)'}
+                    </h4>
+                    <p className="text-xs text-zinc-400">
+                      {language === 'en' ? 'Direct supply to Rahimafrooz & Hamko' : 'রহিমআফরোজ ও হামকো কারখানায় সরবরাহ'}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-950 px-2.5 py-1 rounded-lg border border-emerald-800">
+                  1,936 MT
+                </span>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-zinc-900/90 border border-sky-600/40 flex items-center justify-between gap-4 hover:border-sky-500 transition-all">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-base border border-sky-500/40">
+                    18%
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm sm:text-base">
+                      {language === 'en' ? 'Neutralized Gypsum (Electrolyte)' : 'নিষ্ক্রিয়কৃত জিপসাম স্লাজ'}
+                    </h4>
+                    <p className="text-xs text-zinc-400">
+                      {language === 'en' ? '412k Liters neutralized with sodium carbonate' : 'সালফিউরিক অ্যাসিড সম্পূর্ণ নিষ্ক্রিয়'}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs font-mono font-bold text-sky-400 bg-sky-950 px-2.5 py-1 rounded-lg border border-sky-800">
+                  412k Liters
+                </span>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-zinc-900/90 border border-amber-600/40 flex items-center justify-between gap-4 hover:border-amber-500 transition-all">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-base border border-amber-500/40">
+                    12%
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm sm:text-base">
+                      {language === 'en' ? 'Polypropylene Plastic Granules' : 'পলিপ্রোপিলিন প্লাস্টিক দানা'}
+                    </h4>
+                    <p className="text-xs text-zinc-400">
+                      {language === 'en' ? 'Washed and remelted into fresh battery casings' : 'নতুন ব্যাটারি কেসিং তৈরির কাঁচামাল'}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs font-mono font-bold text-amber-400 bg-amber-950 px-2.5 py-1 rounded-lg border border-amber-800">
+                  358 MT
+                </span>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-zinc-900/90 border border-purple-600/40 flex items-center justify-between gap-4 hover:border-purple-500 transition-all">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-base border border-purple-500/40">
+                    5%
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm sm:text-base">
+                      {language === 'en' ? 'Terminal Connectors & Hardware' : 'কানেক্টর ও মেটাল টার্মিনাল'}
+                    </h4>
+                    <p className="text-xs text-zinc-400">
+                      {language === 'en' ? 'Salvaged copper and zinc alloys' : 'তামা ও ধাতব সংকর পুনর্ব্যবহার'}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs font-mono font-bold text-purple-400 bg-purple-950 px-2.5 py-1 rounded-lg border border-purple-800">
+                  148 MT
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -487,56 +669,83 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </section>
 
-      {/* THE PROBLEM SNAPSHOT TEASER */}
+      {/* THE PROBLEM SNAPSHOT TEASER - GRAPHIC-RICH COMPARISON */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-zinc-900 to-zinc-950 text-white rounded-3xl p-8 sm:p-12 border border-zinc-800 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center shadow-2xl">
-          <div className="lg:col-span-8 space-y-4">
-            <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider">
-              {language === 'en' ? 'The Bangladesh Battery Crisis' : 'বাংলাদেশের ব্যাটারি সংকট'}
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-black font-heading text-white">
-              {language === 'en'
-                ? 'Over 4 Million E-Rickshaws. 35,000+ Tons of Toxic Lead Leaking Annually.'
-                : '৪০ লাখের বেশি ই-রিকশা। প্রতি বছর ৩৫,০০০ টন বিষাক্ত সিসা উন্মুক্ত স্থানে ছড়াচ্ছে।'}
-            </h3>
-            <p className="text-sm sm:text-base text-zinc-300 leading-relaxed">
-              {language === 'en'
-                ? 'Without formal collection, 80%+ of depleted easy-bike batteries end up in unregulated informal backyard smelting pots, poisoning groundwater and causing irreversible neurotoxic damage. VoltLoop transforms this crisis into a sustainable, profitable circular commodity loop.'
-                : 'যথাযথ ব্যবস্থাপনার অভাবে শতকরা ৮০ ভাগ ব্যাটারি অনিবন্ধিত খোলা ভাট্টিতে পোড়ানো হয়, যা মাটি ও পানিকে বিষাক্ত করছে। ভোল্টলুপ এই সংকটকে নিরাপদ অর্থনৈতিক মডেলে রূপান্তর করছে।'}
-            </p>
-            <div className="pt-2 flex flex-wrap items-center gap-4">
-              <button
-                onClick={() => onNavigate('problem')}
-                className="inline-flex items-center gap-2 text-sm font-bold text-emerald-400 hover:text-emerald-300 cursor-pointer"
-              >
-                <span>{language === 'en' ? 'Explore Data & Research Report' : 'পূর্ণ ডাটা রিপোর্ট দেখুন'}</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
+        <div className="bg-gradient-to-br from-zinc-950 via-[#0a100c] to-zinc-950 text-white rounded-3xl p-8 sm:p-12 border-2 border-red-900/40 shadow-2xl space-y-8">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-zinc-800 pb-6">
+            <div className="space-y-3 max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-950/80 border border-red-500/40 text-red-400 text-xs font-mono font-bold uppercase tracking-wider">
+                <AlertTriangle className="w-4 h-4 text-red-400 animate-pulse" />
+                <span>{language === 'en' ? 'The Bangladesh Battery Epidemic' : 'বাংলাদেশের মারাত্মক ব্যাটারি সংকট'}</span>
+              </div>
+              <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading text-white tracking-tight leading-tight">
+                {language === 'en'
+                  ? '4 Million E-Rickshaws. 35,000+ Tons of Toxic Lead Leaking.'
+                  : '৪০ লাখের বেশি ই-রিকশা। ৩৫,০০০ টন বিষাক্ত সিসার উন্মুক্ত হুমকি।'}
+              </h3>
+              <p className="text-base sm:text-lg text-zinc-300 leading-relaxed font-normal">
+                {language === 'en'
+                  ? 'Without formal collection, 80%+ of dead easy-bike batteries end up in unregulated backyard furnaces, venting neurotoxic lead fumes directly into communities.'
+                  : 'যথাযথ ব্যবস্থাপনার অভাবে শতকরা ৮০ ভাগ ব্যাটারি অনিবন্ধিত খোলা ভাট্টিতে পোড়ানো হয়, যা বায়ু, পানি ও মানুষের রক্তে বিষাক্ত সিসা ছড়াচ্ছে।'}
+              </p>
             </div>
+
+            <button
+              onClick={() => onNavigate('problem')}
+              className="self-start lg:self-center px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold flex items-center gap-2.5 shadow-lg transition-all hover:scale-105 cursor-pointer whitespace-nowrap"
+            >
+              <span>{language === 'en' ? 'Explore Full Graphic Report' : 'পূর্ণ চিত্রভিত্তিক রিপোর্ট দেখুন'}</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
 
-          <div className="lg:col-span-4 bg-zinc-800/80 p-6 rounded-2xl border border-zinc-700 space-y-4 shadow-lg">
-            <div className="text-xs text-zinc-400 uppercase font-mono">{language === 'en' ? 'Scrap Middlemen vs VoltLoop' : 'দালাল বনাম ভোল্টলুপ'}</div>
-            <div className="space-y-3 text-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-zinc-700">
-                <span className="text-zinc-300">{language === 'en' ? 'Garage Payout:' : 'গ্যারেজ মূল্য:'}</span>
-                <span className="font-bold text-emerald-400">৳3,400+ (VoltLoop) vs ৳2,800 (Scrap)</span>
-              </div>
-              <div className="flex items-center justify-between pb-2 border-b border-zinc-700">
-                <span className="text-zinc-300">{language === 'en' ? 'Acid Handling:' : 'অ্যাসিড সুরক্ষা:'}</span>
-                <span className="font-bold text-emerald-400">100% Sealed Neutralization</span>
-              </div>
+          {/* Visual Graphic Contrast Cards: Backyard informal vs VoltLoop Safe Loop */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Informal Crisis Card */}
+            <div className="bg-red-950/30 rounded-2xl p-6 border border-red-800/50 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-zinc-300">{language === 'en' ? 'Weighing Precision:' : 'ওজন নির্ভরযোগ্যতা:'}</span>
-                <span className="font-bold text-white">Digital Calibrated Scale</span>
+                <span className="text-xs font-mono font-bold uppercase text-red-400 flex items-center gap-2">
+                  <Skull className="w-4 h-4 text-red-400" />
+                  {language === 'en' ? 'Informal Backyard Scrappers' : 'অনানুষ্ঠানিক খোলা ভাঙারি কারখানা'}
+                </span>
+                <span className="text-xs font-mono px-2 py-0.5 rounded bg-red-900/60 text-red-300 font-bold">Unregulated</span>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div className="bg-zinc-900/80 p-3 rounded-xl border border-red-900/30">
+                  <span className="text-zinc-400 block mb-1">Worker Blood Lead</span>
+                  <span className="text-lg font-black font-mono text-red-400">&gt;65 µg/dL</span>
+                  <span className="text-[10px] text-red-300 block">Severe neurotoxicity</span>
+                </div>
+                <div className="bg-zinc-900/80 p-3 rounded-xl border border-red-900/30">
+                  <span className="text-zinc-400 block mb-1">Acid Handling</span>
+                  <span className="text-lg font-black font-mono text-red-400">Open Drains</span>
+                  <span className="text-[10px] text-red-300 block">Canals & rivers ruined</span>
+                </div>
               </div>
             </div>
-            <button
-              onClick={onOpenSellModal}
-              className="w-full py-3 rounded-xl bg-[#15803D] hover:bg-[#166534] text-white text-xs font-bold transition-all cursor-pointer shadow-md hover:scale-[1.02]"
-            >
-              {language === 'en' ? 'Sell Your Batch' : 'ব্যাটারি বিক্রি করুন'}
-            </button>
+
+            {/* VoltLoop Solution Card */}
+            <div className="bg-emerald-950/30 rounded-2xl p-6 border border-emerald-800/50 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono font-bold uppercase text-emerald-400 flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  {language === 'en' ? 'VoltLoop Closed-Loop Chain' : 'ভোল্টলুপ সার্কুলার নেটওয়ার্ক'}
+                </span>
+                <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-900/60 text-emerald-300 font-bold">100% Certified</span>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div className="bg-zinc-900/80 p-3 rounded-xl border border-emerald-900/30">
+                  <span className="text-zinc-400 block mb-1">Garage Payout Rate</span>
+                  <span className="text-lg font-black font-mono text-emerald-400">৳2,150 / unit</span>
+                  <span className="text-[10px] text-emerald-300 block">Instant bKash payout</span>
+                </div>
+                <div className="bg-zinc-900/80 p-3 rounded-xl border border-emerald-900/30">
+                  <span className="text-zinc-400 block mb-1">Acid Neutralization</span>
+                  <span className="text-lg font-black font-mono text-emerald-400">100% Gypsum</span>
+                  <span className="text-[10px] text-emerald-300 block">Zero groundwater runoff</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

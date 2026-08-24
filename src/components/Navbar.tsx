@@ -48,14 +48,14 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="bg-[#0B150F] text-zinc-300 text-xs py-1.5 px-4 sm:px-8 border-b border-emerald-950">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 text-emerald-400 font-medium">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span className="inline-flex items-center gap-1.5 text-emerald-400 font-semibold font-mono text-[11px] sm:text-xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               {language === 'en' 
-                ? 'Dhaka Collection Hubs Active: 6 Central Depots' 
-                : 'ঢাকা কালেকশন হাব সক্রিয়: ৬টি প্রধান ডিপো'}
+                ? 'VoltLoop: Turning Toxic Strains into Economic Gains.' 
+                : 'ভোল্টলুপ: পরিবেশ দূষণ রোধ ও টেকসই অর্থনৈতিক সমৃদ্ধি।'}
             </span>
-            <span className="hidden md:inline-block text-zinc-600">|</span>
-            <span className="hidden md:inline-flex items-center gap-1 text-zinc-400">
+            <span className="hidden lg:inline-block text-zinc-600">|</span>
+            <span className="hidden lg:inline-flex items-center gap-1 text-zinc-400 text-[11px]">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
               {language === 'en' 
                 ? 'DoE & Basel Convention Certified Closed-Loop' 
@@ -87,7 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Main Navigation Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Brand Logo */}
+          {/* Brand Logo with VOLTLOOP and Tagline */}
           <button
             id="brand-logo-btn"
             onClick={() => {
@@ -96,7 +96,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
             className="flex items-center text-left focus:outline-none group cursor-pointer"
           >
-            <VoltLogo size="md" />
+            <VoltLogo size="md" showTagline={true} />
           </button>
 
           {/* Desktop Nav Links */}

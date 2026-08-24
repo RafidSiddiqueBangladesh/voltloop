@@ -42,9 +42,9 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
           {/* Col 1: Brand & Tagline */}
           <div className="lg:col-span-4 space-y-4">
-            <VoltLogo theme="dark" size="md" />
-            <p className="text-xs text-emerald-400 font-mono italic">
-              "Every dead battery, given a second Volt."
+            <VoltLogo theme="dark" size="md" showTagline={true} />
+            <p className="text-xs text-emerald-400 font-mono font-semibold">
+              "VoltLoop: Turning Toxic Strains into Economic Gains."
             </p>
             <p className="text-xs text-zinc-400 leading-relaxed pr-4">
               {language === 'en'
