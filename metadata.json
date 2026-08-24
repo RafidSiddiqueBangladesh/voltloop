@@ -1,0 +1,6 @@
+{
+  "name": "VoltLoop - Clean Battery Recycling & Offtake",
+  "description": "Safe lead-acid battery collection and recycling platform for Bangladesh's e-rickshaw fleet, providing circular economy offtake for battery manufacturers.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
